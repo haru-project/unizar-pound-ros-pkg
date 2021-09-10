@@ -70,23 +70,21 @@ For more information, please contact dantard@unizar.es
 
 ## Testing on multiple machines with different roscores
 
-Assuming you have 2 computers connected to the same network, make sure the IPs of them are 192.168.1.2, for the **PC1**, and 192.168.1.3, for the **PC2**.
-
 Clone this repository (currently on the branch `haru`) on your workspace and compile it using `catkin_make` in both computers. Take a look to the file [config.h](src/libwrapper/config/config.h):
 
 ```cpp
 TOPIC(std_msgs::String, "chatter", 1, "2", 100, 5, 10000)
 ```
 
-It mainly means this node is configured to send the topic `chatter` from the node 1 (192.168.1.2) to the node 2 (192.168.1.3).
+It mainly means this node is configured to send data from a topic called `chatter` (notice it will not be the final name, some namespaces are added) from the node 1 (192.168.1.2) to the node 2 (192.168.1.3). Also notice that it assumes you have 2 computers connected to the same network and their IPs are 192.168.1.2, for the **PC1**, and 192.168.1.3, for the **PC2**. In case they have other IPs, please modify the previous node IDs (1 and "2" in the previous snippet) and the corresponding ones in the next commands, although take in account the [valid range for these IPs](#found-issues).
 
-So, execute the following in the **PC1** (192.168.1.2):
+Then, execute the following in the **PC1** (192.168.1.2):
 
 ```bash
 # Terminal 1
 roscore 
 # Terminal 2
-rosrun ros_pound ros-pound --node-id 1 --num-of-nodes 3
+rosrun ros_pound ros-pound --node-id 1 --num-of-nodes 1
 ```
 
 And the following in the **PC2** (192.168.1.3):
@@ -95,7 +93,7 @@ And the following in the **PC2** (192.168.1.3):
 # Terminal 1
 roscore 
 # Terminal 2
-rosrun ros_pound ros-pound --node-id 2 --num-of-nodes 3
+rosrun ros_pound ros-pound --node-id 2 --num-of-nodes 1
 ```
 
 Check that a topic called `/R1/chatter` exists in the PC1. In the same way, check that a topic called `/R2/rx/R1/chatter` exists in the PC2. The first one is the *publisher* topic from the PC1 and the second one is the *subscriber* topic on the PC2, where the `/R1/chatter` topic will be automatically published.
@@ -123,3 +121,9 @@ data: "Hello my friend"
 ---
 (...)
 ```
+
+## Found Issues
+
+1. The `ros_pound` doesn't find some ROS shared libraries. It has been fixed in the `CMakeLists.txt`adding a post install instructions to set execution permissions to every user.
+
+2. The range of valid IPs is from 1 to 32, in other words, the valid node_ids go from 0 to 31. Some cast or array size issue in the code?
