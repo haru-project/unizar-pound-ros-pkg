@@ -68,4 +68,58 @@ The Pound node is similar to RT-WMP package available at http://wiki.ros.org/ros
 For more information, please contact dantard@unizar.es
 
 
+## Testing on multiple machines with different roscores
 
+Assuming you have 2 computers connected to the same network, make sure the IPs of them are 192.168.1.2, for the **PC1**, and 192.168.1.3, for the **PC2**.
+
+Clone this repository (currently on the branch `haru`) on your workspace and compile it using `catkin_make` in both computers. Take a look to the file [config.h](src/libwrapper/config/config.h):
+
+```cpp
+TOPIC(std_msgs::String, "chatter", 1, "2", 100, 5, 10000)
+```
+
+It mainly means this node is configured to send the topic `chatter` from the node 1 (192.168.1.2) to the node 2 (192.168.1.3).
+
+So, execute the following in the **PC1** (192.168.1.2):
+
+```bash
+# Terminal 1
+roscore 
+# Terminal 2
+rosrun ros_pound ros-pound --node-id 1 --num-of-nodes 3
+```
+
+And the following in the **PC2** (192.168.1.3):
+
+```bash
+# Terminal 1
+roscore 
+# Terminal 2
+rosrun ros_pound ros-pound --node-id 2 --num-of-nodes 3
+```
+
+Check that a topic called `/R1/chatter` exists in the PC1. In the same way, check that a topic called `/R2/rx/R1/chatter` exists in the PC2. The first one is the *publisher* topic from the PC1 and the second one is the *subscriber* topic on the PC2, where the `/R1/chatter` topic will be automatically published.
+
+To test it, let's publish some data into the first topic on the **PC1**:
+
+```bash
+rostopic pub -r 5 /R1/chatter std_msgs/String "data: 'Hello my friend'"
+```
+
+And let's read it on **PC2**:
+
+```bash
+rostopic echo /R2/rx/R1/chatter
+```
+
+you should get the following output:
+
+```bash
+data: "Hello my friend"
+---
+data: "Hello my friend"
+---
+data: "Hello my friend"
+---
+(...)
+```
