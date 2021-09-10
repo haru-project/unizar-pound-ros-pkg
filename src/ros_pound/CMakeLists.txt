@@ -29,4 +29,5 @@ add_custom_command(TARGET ros-pound
         COMMAND sudo chmod a+rwx ${CMAKE_BINARY_DIR}/../devel/lib/ros_pound/ros-pound
         COMMAND sudo chown root:root ${CMAKE_BINARY_DIR}/../devel/lib/ros_pound/ros-pound
         COMMAND sudo chmod g+s ${CMAKE_BINARY_DIR}/../devel/lib/ros_pound/ros-pound
+        COMMAND sudo chmod 777 ${CMAKE_BINARY_DIR}/../devel/lib/ros_pound/ros-pound
 )
