@@ -13,7 +13,7 @@ By default, ros-pound uses UDP/IP communication. The network must have an addres
 
 etc.
 
-The base IP is by default `192.168.1.1`; this can be changed in the YAML configuration file specifying the parameter:
+The base IP is by default `192.168.1.1`; this can be changed in the YAML configuration file (`~/.rospound/config.yaml`)specifying the parameter:
 
 `base_ip = 192.168.2.1`
 
@@ -38,7 +38,7 @@ The data type used must be specified in the `config/data_types.h` file. For exam
 `#include <std_msgs/Float64.h>`
 
 
-The complete list of options for the YAML file is:
+The complete list of options for the YAML file (`~/.rospound/config.yaml`) is:
 
 ```     
 use_ip: true
