@@ -9,6 +9,6 @@
 */
 
 // This is an example topic to be send from the roscore on 192.168.1.2 to 
-// the roscore on 192.168.1.3, assuming you have not modified the base_ip
+// the roscore on 192.168.1.3, assuming you have not modified the default base_ip (192.168.1.1)
 // in the config YAML file. This line must be in both remote ros_pound nodes
 TOPIC(std_msgs::String, "chatter", 1, "2", 100, 5, 10000)
