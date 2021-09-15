@@ -287,7 +287,7 @@ int mcast_to_id(unsigned int dest){
 
 static std::vector<int> mcast_to_vector(unsigned int dest){
     std::vector<int> v;
-    for (int i = 0; i<32; i++){
+    for (int i = 0; i<255; i++){
         if (dest & (1 << i)){
             v.push_back(i);
         }

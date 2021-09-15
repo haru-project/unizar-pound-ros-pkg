@@ -76,7 +76,7 @@ Clone this repository (currently on the branch `haru`) on your workspace and com
 TOPIC(std_msgs::String, "chatter", 1, "2", 100, 5, 10000)
 ```
 
-It mainly means this node is configured to send data from a topic called `chatter` (notice it will not be the final name, some namespaces are added) from the node 1 (192.168.1.2) to the node 2 (192.168.1.3). Also notice that it assumes you have 2 computers connected to the same network and their IPs are 192.168.1.2, for the **PC1**, and 192.168.1.3, for the **PC2**. In case they have other IPs, please modify the previous node IDs (1 and "2" in the previous snippet) and the corresponding ones in the next commands, although take in account the [valid range for these IPs](#found-issues).
+It mainly means this node is configured to send data from a topic called `chatter` (notice it will not be the final name, some namespaces are added) from the node 1 (192.168.1.2) to the node 2 (192.168.1.3). Also notice that it assumes you have 2 computers connected to the same network and their IPs are 192.168.1.2, for the **PC1**, and 192.168.1.3, for the **PC2**. In case they have other IPs, please modify the previous node IDs (1 and "2" in the previous snippet) and the corresponding ones in the next commands, although take in account the [valid range for these IPs](#found-issues-in-the-original-repository).
 
 Notice also that we have not added any config.yaml file, so the `base_ip` is the default one 192.168.1.**1**, so the node_id of the a PC with the IP 192.168.1.N is N-**1**. In our case this base IP is the router IP.
 
@@ -179,10 +179,10 @@ rosrun ros_pound ros-pound --node-id 1 --num-of-nodes 2
 
 Check that the previous topics have been created and feel free to send messages through them and receive the messages in the remote computer.
 
-## Found Issues
+## Found Issues in the original repository
 
-1. The `ros_pound` doesn't find some ROS shared libraries. It has been fixed in the `CMakeLists.txt`adding a post install instructions to set execution permissions to every user, but it should be fixed in other way.
+1. The `ros_pound` node doesn't find some ROS shared libraries. **Fixed** in the `CMakeLists.txt`adding a post install instructions to set execution permissions to every user, but it should be fixed in other way.
 
-2. The range of valid IPs seem to be from `base_ip` to `base_ip + 31`. Some cast or array size issue in the code?
+2. The range of valid IPs seem to be from `base_ip` to `base_ip + 31`. **Fixed** modifying the function `mcast_to_vector()` of the node `ros_pound`, that was limiting the destination node IDs to 31.
 
 3. It is not possible to send the same topic name in both directions. It means that if you want to send the topic `/chatter` from PC1 to PC2, you will not can send it from PC2 to PC1, although it seems it should be possible due to the automatic namespaces that the rospound node add to the topics.
