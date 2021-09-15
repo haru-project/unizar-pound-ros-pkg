@@ -183,6 +183,6 @@ Check that the previous topics have been created and feel free to send messages 
 
 1. The `ros_pound` node doesn't find some ROS shared libraries. **Fixed** in the `CMakeLists.txt`adding a post install instructions to set execution permissions to every user, but it should be fixed in other way.
 
-2. The range of valid IPs seem to be from `base_ip` to `base_ip + 31`. **Fixed** modifying the function `mcast_to_vector()` of the node `ros_pound`, that was limiting the destination node IDs to 31.
+2. The range of valid IPs seem to be from `base_ip` to `base_ip + 31`. ~~**Fixed** modifying the function `mcast_to_vector()` of the node `ros_pound`, that was limiting the destination node IDs to 31.~~ A first attempt to increase from 31 to 254 the max node ID range makes the transfered data size increases a lot for unknown reasons, but it seems like additional intermediate destinations are created by the previous function for node IDs higher than 31.
 
 3. It is not possible to send the same topic name in both directions. It means that if you want to send the topic `/chatter` from PC1 to PC2, you will not can send it from PC2 to PC1, although it seems it should be possible due to the automatic namespaces that the rospound node add to the topics.
